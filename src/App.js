@@ -3,7 +3,7 @@ import React, { Component } from "react";
 export default class FecthDummyAPI extends Component {
   state = {
     loading: true,
-    person: null,
+    poeple: [],
   };
 
   async componentDidMount() {
@@ -11,25 +11,32 @@ export default class FecthDummyAPI extends Component {
     const response = await fetch(url);
     const data = await response.json();
     this.setState({
-      person: data.results[0],
+      person: data.results,
       loading: false,
     });
   }
 
+  if(this.state.loading){
+    <div> ..loading.. </div>
+  }
+
+  if(!this.state.people.length) {
+    <div> people not found </div>
+  }
+
+  const peopleJSX = this.state.people.map(person => (
+    <div key={person.login.uuid}>
+    <div> {person.name.title} </div>
+    <div> {person.name.first} </div>
+    <div> {person.name.last} </div>
+    <img src={person.picture.large} alt="Pic" />
+    </div>
+        ));
+
   render() {
     return (
-      <div>
-        {this.state.loading || !this.state.person ? (
-          <div> ..loading.. </div>
-        ) : (
-          <div>
-            <div> {this.state.person.name.title} </div>
-            <div> {this.state.person.name.first} </div>
-            <div> {this.state.person.name.last} </div>
-            <img src={this.state.person.picture.large} alt="Pic" />
-          </div>
-        )}
-      </div>
-    );
-  }
+        <div>
+            {this.peopleJSX}
+        </div>;
+    )
 }
